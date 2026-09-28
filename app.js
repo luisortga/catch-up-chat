@@ -80,6 +80,6 @@ app.get('/', (req, res) => {
   res.sendFile(process.cwd() + '/client/index.html')
 })
 
-server.listen(port, () => {
+server.listen(port, '0.0.0.0', () => {
   console.log(`Server running on port ${port}`)
 })
