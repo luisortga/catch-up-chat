@@ -48,7 +48,7 @@ The backend also persists messages in a SQL database, allowing new clients to re
 
 <div align="center">
 
-<img src="https://i.ibb.co/DP9sRg38/Indice.png" width="700" alt="Catch Up Chat interface">
+<img src="https://i.ibb.co/DP9sRg38/Indice.png" width="350" alt="Catch Up Chat interface">
 
 </div>
 
