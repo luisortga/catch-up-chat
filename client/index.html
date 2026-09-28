@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pipecoding chat</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <script type="module">
+      import { io } from 'https://cdn.socket.io/4.3.2/socket.io.esm.min.js'
+
+      const getUsername = () => {
+        const username = localStorage.getItem('username')
+        if (username) return username
+
+        const randomUsername = `user_${Math.random().toString(36).slice(2, 8)}`
+        localStorage.setItem('username', randomUsername)
+        return randomUsername
+      }
+
+      const socket = io({
+        auth: {
+          username: getUsername(),
+          serverOffset: 0,
+        },
+      })
+
+      const form = document.getElementById('form')
+      const input = document.getElementById('input')
+      const messages = document.getElementById('messages')
+
+      socket.on('chat message', (msg, serverOffset, username) => {
+        const item = `<li>
+        <p>${msg}</p>
+        <small>${username}</small>
+      </li>`
+        messages.insertAdjacentHTML('beforeend', item)
+        socket.auth.serverOffset = serverOffset
+        // scroll to bottom of messages
+        messages.scrollTop = messages.scrollHeight
+      })
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault()
+
+        if (input.value) {
+          socket.emit('chat message', input.value)
+          input.value = ''
+        }
+      })
+    </script>
+  </head>
+
+  <body>
+    <section id="chat">
+      <ul id="messages"></ul>
+      <form id="form">
+        <input
+          type="text"
+          name="message"
+          id="input"
+          placeholder="Type a message"
+          autocomplete="off"
+        />
+        <button type="submit">Enviar</button>
+      </form>
+    </section>
+  </body>
+</html>
